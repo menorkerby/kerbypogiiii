@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kerby Website</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="navbar">
+      <a href="#home">Home</a>
+      <a href="#contact">Contact Us</a>
+      <a href="#feedback">Feedback</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="home" id="home">
+      <div class="image">
+        <img src="my photo.png" alt="My photo" />
+      </div>
+
+      <div class="content">
+        <h1>John Kerby V. Menor</h1>
+        <p>
+          I'm a third-year BSIT student at PHINMA Saint Jude College. I’m an aspiring IT professional with a love for computers and problem-solving.<br>
+          I’m learning coding, networking, and tech support, with hopes of building a successful career in the IT industry.
+        </p>
+
+        <h2>Skills</h2>
+        <ul class="skills">
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>C#</li>
+        </ul>
+
+        <h3>Connect with Me</h3>
+        <div class="socials">
+          <a href="https://www.facebook.com/MenorKerby" target="_blank" title="Facebook">
+            <img src="facebook.png" alt="Facebook" class="social-icon"> 
+          </a>
+          <a href="https://www.instagram.com/wtjsgjxyjzg/" target="_blank" title="Instagram">
+            <img src="insta.png" alt="Instagram" class="social-icon"> 
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <h2>Contact Me</h2>
+      <form id="contactForm" class="contact-form">
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" name="fullname" required>
+
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" required>
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+
+        <div id="contactMessage" class="form-message"></div>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+
+    <section class="feedback" id="feedback">
+      <h2>Feedback</h2>
+      <form id="feedbackForm" class="feedback-form">
+        <label>Rate this page:</label>
+        <div class="rating">
+          <label><input type="radio" name="rating" value="1"> 1 ★</label>
+          <label><input type="radio" name="rating" value="2"> 2 ★</label>
+          <label><input type="radio" name="rating" value="3"> 3 ★</label>
+          <label><input type="radio" name="rating" value="4"> 4 ★</label>
+          <label><input type="radio" name="rating" value="5"> 5 ★</label>
+        </div>
+
+        <label for="type">Feedback Type:</label>
+        <select id="type" name="type" required>
+          <option value="">-- Select Type --</option>
+          <option value="bug">Bug Report</option>
+          <option value="suggestion">Suggestion</option>
+          <option value="praise">Praise</option>
+        </select>
+
+        <label for="comments">Comments:</label>
+        <textarea id="comments" name="comments" rows="4" required></textarea>
+
+        <label class="terms">
+          <input type="checkbox" required>
+          I agree to the <a id="terms-link">terms and conditions</a>
+        </label>
+
+        <div id="feedbackMessage" class="form-message"></div>
+        <button type="submit">Submit Feedback</button>
+      </form>
+    </section>
+    
+    <div id="termsModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" id="closeModal">&times;</span>
+        <h3>Terms and Conditions</h3>
+        <p>
+          By submitting feedback, you agree that your responses may be used to improve this website.
+          Your data will not be shared or sold to third parties.
+          Ensure your comments follow respectful communication and contain no harmful or inappropriate content.
+        </p>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>&copy; 2025 John Kerby V. Menor. All rights reserved.</p>
+      <a href="#home" class="back-to-top">Back to Top ↑</a>
+    </footer>
+  </main>
+
+  <script>
+    const termsLink = document.getElementById('terms-link');
+    const modal = document.getElementById('termsModal');
+    const closeBtn = document.getElementById('closeModal');
+
+    termsLink.addEventListener('click', () => modal.style.display = 'block');
+    closeBtn.addEventListener('click', () => modal.style.display = 'none');
+    window.addEventListener('click', e => {
+      if (e.target === modal) modal.style.display = 'none';
+    });
+
+    function showMessage(elementId, message) {
+      const msg = document.getElementById(elementId);
+      msg.textContent = message;
+      msg.classList.remove("fade-out");
+      setTimeout(() => {
+        msg.classList.add("fade-out");
+        setTimeout(() => {
+          msg.textContent = "";
+          msg.classList.remove("fade-out");
+        }, 500);
+      }, 3000);
+    }
+
+    document.getElementById("contactForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      const response = await fetch("https://formspree.io/f/mldnkkll", {
+        method: "POST",
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        showMessage("contactMessage", "Thank you for contacting me!");
+        form.reset();
+      } else {
+        showMessage("contactMessage", "Oops! Something went wrong.");
+      }
+    });
+
+    document.getElementById("feedbackForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      const response = await fetch("https://formspree.io/f/myzjaapd", {
+        method: "POST",
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        showMessage("feedbackMessage", "Thanks for your feedback!");
+        form.reset();
+      } else {
+        showMessage("feedbackMessage", "Sorry! There was an error.");
+      }
+    });
+  </script>
+
+</body>
+</html>
